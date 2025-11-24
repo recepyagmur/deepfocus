@@ -4,6 +4,14 @@ Yapay zeka kullanarak kendi kişisel isteklerime göre sunucumda basitçe çalı
 
 <img width="450" alt="image" src="https://github.com/user-attachments/assets/efd0d6a7-4783-4edf-ba19-29baf4d949f5" />
 
+<img width="978" height="835" alt="image" src="https://github.com/user-attachments/assets/2215f42f-0dc4-4731-ba5f-88bd108c6d66" />
+
+<p float="left">
+  <img src="https://github.com/user-attachments/assets/efd0d6a7-4783-4edf-ba19-29baf4d949f5" width="45%" />
+  <img src="https://github.com/user-attachments/assets/2215f42f-0dc4-4731-ba5f-88bd108c6d66" width="45%" />
+</p>
+
+
 Deep Focus, odaklanarak çalışmak isteyenler için geliştirilmiş modern bir görev planlama ve zaman takip aracıdır.
 Günlük hedeflerini planlayabilir, her göreve başlangıç–bitiş saatleri belirleyebilir, çalıştığın süreyi otomatik olarak kaydedebilir ve gün içindeki ilerlemeni dinamik bir progress bar ile takip edebilirsin.
 
