@@ -3,8 +3,8 @@
 Yapay zeka kullanarak kendi kişisel isteklerime göre sunucumda basitçe çalıştırabileceğim bir planlama uygulaması yapmıştım, gönlünüzce düzenleyip kullanabilirsiniz. Public sunucularda kullanım için tavsiye etmiyorum, kullanacaksanızda lütfen gerekli güvenlik önlemlerini alınız :))
 
 <p float="left">
-  <img src="https://github.com/user-attachments/assets/efd0d6a7-4783-4edf-ba19-29baf4d949f5" width="45%" height="300" />
-  <img src="https://github.com/user-attachments/assets/2215f42f-0dc4-4731-ba5f-88bd108c6d66" width="45%" height="300" />
+  <img src="https://github.com/user-attachments/assets/efd0d6a7-4783-4edf-ba19-29baf4d949f5" width="45%" height="450" />
+  <img src="https://github.com/user-attachments/assets/2215f42f-0dc4-4731-ba5f-88bd108c6d66" width="45%" height="450" />
 </p>
 
 
