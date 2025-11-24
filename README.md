@@ -1,6 +1,6 @@
 # deepfocus
 
-Yapay zeka kullanarak kendi kişisel isteklerime göre sunucumda basitçe çalıştırabileceğim bir planlama uygulaması yapmıştım, gönlünüzce düzenleyip kullanabilirsiniz.
+Yapay zeka kullanarak kendi kişisel isteklerime göre sunucumda basitçe çalıştırabileceğim bir planlama uygulaması yapmıştım, gönlünüzce düzenleyip kullanabilirsiniz. Public sunucularda kullanım için tavsiye etmiyorum, kullanacaksanızda lütfen gerekli güvenlik önlemlerini alınız :))
 
 Deep Focus, odaklanarak çalışmak isteyenler için geliştirilmiş modern bir görev planlama ve zaman takip aracıdır.
 Günlük hedeflerini planlayabilir, her göreve başlangıç–bitiş saatleri belirleyebilir, çalıştığın süreyi otomatik olarak kaydedebilir ve gün içindeki ilerlemeni dinamik bir progress bar ile takip edebilirsin.
