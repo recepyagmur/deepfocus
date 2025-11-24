@@ -22,3 +22,13 @@ Günlük hedeflerini planlayabilir, her göreve başlangıç–bitiş saatleri b
 🎨 Modern koyu tema + glassmorphism arayüz
 
 💾 JSON tabanlı API ile verilerin kalıcı olarak saklanması
+
+# GEREKLİ PAKETLER VE AYARLAR:
+
+```
+sudo apt update
+sudo apt install apache2 php libapache2-mod-php -y
+sudo systemctl restart apache2
+sudo chown -R www-data:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+```
