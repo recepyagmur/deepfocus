@@ -40,6 +40,19 @@ sudo systemctl restart apache2
 sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 755 /var/www/html
 ```
+Telegram Botu Oluştur
+Telegram'da @BotFather kullanıcısını bul.
+
+/newbot yaz ve botuna bir isim ver.
+
+Sana uzun bir TOKEN verecek (Örn: 123456:ABC-DEF...). Bunu kaydet.
+
+Kendi oluşturduğun bota git ve "Start"a bas.
+
+Tarayıcıdan şu adrese git: https://api.telegram.org/botSENIN_TOKENIN/getUpdates
+
+Sayfada "id": 123456789 yazan kısmı bul. Bu senin Chat ID'n. Bunu da kaydet.
+
 ```
 crontab -e # 1'i seçip aşağıdaki komutu sonra ekleyebilirsiniz
 * * * * * /usr/bin/php /var/www/notify.php
