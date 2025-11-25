@@ -8,259 +8,71 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
 
     <style>
-        /* --- CSS STİLLERİ --- */
+        /* --- CSS AYARLARI --- */
         :root {
             --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            --card-bg: rgba(30, 41, 59, 0.85); /* Biraz daha koyu opaklık */
+            --card-bg: rgba(30, 41, 59, 0.85);
             --card-border: rgba(255, 255, 255, 0.1);
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --accent: #eab308;
-            --accent-glow: rgba(234, 179, 8, 0.3);
-            --success: #10b981;
-            --danger: #ef4444;
-
-            /* Kategori Renkleri */
-            --cat-work: #3b82f6;
-            --cat-study: #a855f7;
-            --cat-sport: #f97316;
-            --cat-personal: #ec4899;
+            --text-main: #f1f5f9; --text-muted: #94a3b8; --accent: #eab308;
+            --success: #10b981; --danger: #ef4444;
+            --cat-work: #3b82f6; --cat-study: #a855f7; --cat-sport: #f97316; --cat-personal: #ec4899;
         }
 
         * { box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-gradient); color: var(--text-main); min-height: 100vh; margin: 0; display: flex; justify-content: center; align-items: center; padding: 20px; }
 
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-main);
-            min-height: 100vh;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+        .container { background: var(--card-bg); backdrop-filter: blur(20px); width: 100%; max-width: 650px; border-radius: 24px; border: 1px solid var(--card-border); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6); padding: 40px; position: relative; overflow: hidden; }
+        .glow-spot { position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: var(--accent); filter: blur(80px); opacity: 0.2; border-radius: 50%; z-index: 0; }
 
-        .container {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            width: 100%;
-            max-width: 650px;
-            border-radius: 24px;
-            border: 1px solid var(--card-border);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
-            padding: 40px;
-            position: relative;
-            overflow: hidden;
-        }
+        header { position: relative; z-index: 1; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-start; }
+        header h1 { font-size: 28px; font-weight: 700; margin: 0; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .quote { font-size: 13px; color: var(--text-muted); font-style: italic; margin-top: 8px; border-left: 2px solid var(--accent); padding-left: 10px; max-width: 400px; }
+        .streak-badge { background: rgba(239, 68, 68, 0.15); color: #fca5a5; padding: 8px 12px; border-radius: 12px; font-size: 13px; font-weight: 700; display: none; align-items: center; gap: 6px; border: 1px solid rgba(239, 68, 68, 0.3); }
 
-        /* Arkaplan Işıltısı */
-        .glow-spot {
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: var(--accent);
-            filter: blur(80px);
-            opacity: 0.2;
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        /* --- BAŞLIK ALANI --- */
-        header {
-            position: relative;
-            z-index: 1;
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .header-content h1 {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 0;
-            background: linear-gradient(to right, #fff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .quote {
-            font-size: 13px;
-            color: var(--text-muted);
-            font-style: italic;
-            margin-top: 8px;
-            border-left: 2px solid var(--accent);
-            padding-left: 10px;
-            max-width: 400px;
-        }
-
-        /* Zincir (Streak) Rozeti */
-        .streak-badge {
-            background: rgba(239, 68, 68, 0.15);
-            color: #fca5a5;
-            padding: 8px 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            display: none; /* JS ile açılacak */
-            align-items: center;
-            gap: 6px;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
-        }
-
-        /* --- PROGRESS BAR --- */
         .progress-container { margin-bottom: 25px; position: relative; z-index: 1; }
-        .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
-        .progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--accent); width: 0%; border-radius: 10px; box-shadow: 0 0 10px var(--accent-glow); transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .progress-track { height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-top: 8px; }
+        .progress-fill { height: 100%; background: var(--accent); width: 0%; border-radius: 10px; transition: width 0.6s; }
+        .progress-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
 
-        /* --- FORM ALANLARI --- */
-        .input-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-            position: relative;
-            z-index: 1;
-        }
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; position: relative; z-index: 1; }
         .full-width { grid-column: span 2; }
+        input, select { background: rgba(0, 0, 0, 0.3); border: 1px solid var(--card-border); padding: 14px; border-radius: 12px; color: #fff; font-family: inherit; outline: none; width: 100%; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--accent); background: rgba(0, 0, 0, 0.5); }
+        input[type="time"]::-webkit-calendar-picker-indicator, input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 
-        input, select {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--card-border);
-            padding: 14px;
-            border-radius: 12px;
-            color: #fff;
-            font-family: inherit;
-            font-size: 14px;
-            outline: none;
-            transition: 0.3s;
-            width: 100%;
-        }
-        /* Takvim ve Saat ikonunu beyaz yap */
-        input[type="time"]::-webkit-calendar-picker-indicator,
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        button#addBtn { grid-column: span 2; background: var(--accent); color: #0f172a; border: none; padding: 15px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        button#addBtn:hover { transform: translateY(-2px); }
 
-        input:focus, select:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 2px var(--accent-glow);
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        /* Select Ok İkonu */
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 15px center;
-            background-size: 12px;
-            cursor: pointer;
-        }
-        select option { background: #1e293b; color: #fff; }
-
-        button#addBtn {
-            grid-column: span 2;
-            background: var(--accent);
-            color: #0f172a;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 16px;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        button#addBtn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(234, 179, 8, 0.2); }
-        button#addBtn:disabled { opacity: 0.6; cursor: wait; }
-
-        /* --- LİSTE TASARIMI --- */
         ul { list-style: none; padding: 0; margin: 30px 0 0 0; max-height: 450px; overflow-y: auto; }
         ul::-webkit-scrollbar { width: 4px; }
         ul::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
-        li {
-            background: rgba(255, 255, 255, 0.04);
-            margin-bottom: 12px;
-            padding: 16px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: grid;
-            grid-template-columns: auto 1fr auto auto; /* Grip - İçerik - Sayaç - Sil */
-            gap: 12px;
-            align-items: center;
-            transition: background 0.2s;
-            position: relative;
-        }
+        li { background: rgba(255, 255, 255, 0.04); margin-bottom: 12px; padding: 16px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.05); display: grid; grid-template-columns: auto 1fr auto auto; gap: 12px; align-items: center; position: relative; }
 
-        /* Sürükleme Tutamacı */
-        .drag-handle {
-            color: var(--text-muted);
-            cursor: grab;
-            padding: 5px;
-            opacity: 0.5;
-            font-size: 18px;
-        }
-        .drag-handle:hover { opacity: 1; color: #fff; }
-
-        .sortable-ghost { opacity: 0.4; background: rgba(234, 179, 8, 0.1); border: 1px dashed var(--accent); }
-        .sortable-drag { cursor: grabbing; background: #1e293b; opacity: 1; }
-
-        /* Kategori Renk Çizgisi */
-        li::before {
-            content: ''; position: absolute; left: 0; top: 16px; bottom: 16px; width: 4px;
-            background: var(--text-muted); border-radius: 0 4px 4px 0;
-        }
-        li.cat-work::before { background: var(--cat-work); box-shadow: 0 0 8px var(--cat-work); }
-        li.cat-study::before { background: var(--cat-study); box-shadow: 0 0 8px var(--cat-study); }
-        li.cat-sport::before { background: var(--cat-sport); box-shadow: 0 0 8px var(--cat-sport); }
-        li.cat-personal::before { background: var(--cat-personal); box-shadow: 0 0 8px var(--cat-personal); }
-
-        li.completed { opacity: 0.5; order: 999; }
-        li.completed .task-text { text-decoration: line-through; color: var(--text-muted); }
+        .drag-handle { color: var(--text-muted); cursor: grab; padding: 5px; opacity: 0.5; font-size: 18px; }
+        li::before { content: ''; position: absolute; left: 0; top: 16px; bottom: 16px; width: 4px; background: var(--text-muted); border-radius: 0 4px 4px 0; }
+        li.cat-work::before { background: var(--cat-work); } li.cat-study::before { background: var(--cat-study); }
+        li.cat-sport::before { background: var(--cat-sport); } li.cat-personal::before { background: var(--cat-personal); }
+        li.completed { opacity: 0.5; order: 999; } li.completed .task-text { text-decoration: line-through; color: var(--text-muted); }
 
         .task-info { cursor: pointer; }
-
         .badges { display: flex; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;}
         .badge { font-size: 10px; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; font-weight: 700; }
+        .badge-cat { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
         .badge-time { background: rgba(234, 179, 8, 0.15); color: var(--accent); }
-        .badge-date { background: rgba(255, 255, 255, 0.1); color: var(--text-muted); }
-        .badge-cat { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); }
-
-        /* Çalışılan Süre Rozeti */
         .badge-worked { background: rgba(16, 185, 129, 0.15); color: #34d399; display: none; }
 
-        .task-text { font-size: 16px; font-weight: 500; margin-bottom: 4px; display: block; }
+        .task-text { font-size: 16px; font-weight: 500; display: block; }
 
-        /* --- TIMER KUTUSU --- */
-        .timer-box {
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .timer-display {
-            font-family: monospace; font-size: 14px; font-weight: 700;
-            color: var(--text-muted); width: 70px; text-align: center;
-        }
+        .timer-box { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); }
+        .timer-display { font-family: monospace; font-size: 14px; font-weight: 700; color: var(--text-muted); width: 70px; text-align: center; }
         .timer-active { color: var(--accent); text-shadow: 0 0 10px rgba(234, 179, 8, 0.4); }
-
-        .timer-btn {
-            background: var(--text-main); color: #0f172a; border: none;
-            width: 26px; height: 26px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center; cursor: pointer;
-            font-size: 10px; transition: 0.2s;
-        }
-        .timer-btn:hover { transform: scale(1.1); background: var(--accent); }
+        .timer-btn { background: var(--text-main); color: #0f172a; border: none; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .timer-btn:hover { background: var(--accent); }
 
         .delete-btn { background: transparent; border: none; color: var(--danger); font-size: 18px; cursor: pointer; opacity: 0.4; padding: 5px; }
-        .delete-btn:hover { opacity: 1; transform: scale(1.1); }
-
+        .delete-btn:hover { opacity: 1; }
         .empty-state { text-align: center; color: var(--text-muted); margin-top: 40px; font-weight: 300; opacity: 0.6; }
-
     </style>
 </head>
 <body>
@@ -270,13 +82,10 @@
 
         <header>
             <div class="header-content">
-                <h1>Deep Focus</h1>
+                <h1>Deep Focus | Pro</h1>
                 <div class="quote" id="quoteBox">Yükleniyor...</div>
             </div>
-
-            <div class="streak-badge" id="streakBadge">
-                🔥 <span>0 Gün</span>
-            </div>
+            <div class="streak-badge" id="streakBadge">🔥 <span>0 Gün</span></div>
         </header>
 
         <div class="progress-container">
@@ -291,23 +100,17 @@
 
         <div class="input-grid">
             <input type="date" id="taskDate">
-
             <select id="taskCategory">
-                <option value="other">Kategori (Genel)</option>
+                <option value="other">Genel</option>
                 <option value="work">💼 İş</option>
                 <option value="study">📚 Okul</option>
                 <option value="sport">💪 Spor</option>
                 <option value="personal">🏠 Kişisel</option>
             </select>
-
             <input type="time" id="startTime">
             <input type="time" id="endTime">
-
-            <input type="text" id="taskInput" class="full-width" placeholder="Hedefin nedir? (Örn: Raporu tamamla)" onkeypress="handleEnter(event)">
-
-            <button id="addBtn" onclick="addTask()">
-                PLANLA VE BAŞLA
-            </button>
+            <input type="text" id="taskInput" class="full-width" placeholder="Hedefin nedir?" onkeypress="handleEnter(event)">
+            <button id="addBtn" onclick="addTask()">PLANLA VE BAŞLA</button>
         </div>
 
         <ul id="taskList"></ul>
@@ -318,26 +121,18 @@
 
     <script>
         const API_URL = 'api.php';
-        let activeTimerInterval = null;
-        let activeTaskId = null;
-        let tasksData = []; // Tüm veriyi hafızada tutuyoruz
+        // Aktif sayaçların interval ID'lerini tutar
+        const activeIntervals = {};
+        let tasksData = [];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initApp();
-        });
+        document.addEventListener('DOMContentLoaded', () => { initApp(); });
 
         function initApp() {
-            // Bugünün tarihini ayarla
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('taskDate');
             dateInput.value = today;
+            dateInput.addEventListener('change', () => { renderTasks(tasksData); });
 
-            // Tarih değişince listeyi filtrele
-            dateInput.addEventListener('change', () => {
-                renderTasks(tasksData); // Filtre render içinde yapılıyor
-            });
-
-            // Saat Ayarları (Şu an ve 1 saat sonrası)
             const now = new Date();
             const h = String(now.getHours()).padStart(2,'0');
             const m = String(now.getMinutes()).padStart(2,'0');
@@ -348,63 +143,48 @@
             const me = String(now.getMinutes()).padStart(2,'0');
             document.getElementById('endTime').value = `${he}:${me}`;
 
-            // Fonksiyonları Başlat
             loadQuote();
             fetchTasks();
             initSortable();
         }
 
-        // --- GÜNLÜK SÖZLER (DOSYADAN) ---
         async function loadQuote() {
             try {
                 const response = await fetch('quotes.json');
                 const quotes = await response.json();
-
-                // Güne göre sabit index (Her gün değişir)
                 const dayIndex = Math.floor(Date.now() / 86400000);
-                const quote = quotes[dayIndex % quotes.length];
-
-                document.getElementById('quoteBox').textContent = `"${quote}"`;
-            } catch (error) {
-                console.error("Sözler yüklenemedi:", error);
-                document.getElementById('quoteBox').textContent = '"Başarı bir yolculuktur, varış noktası değil."';
-            }
+                document.getElementById('quoteBox').textContent = `"${quotes[dayIndex % quotes.length]}"`;
+            } catch (e) { document.getElementById('quoteBox').textContent = '"Başarı bir yolculuktur."'; }
         }
 
         function handleEnter(e) { if (e.key === 'Enter') addTask(); }
 
-        // --- SORTABLE (Sürükle Bırak) ---
         function initSortable() {
             const el = document.getElementById('taskList');
             Sortable.create(el, {
-                animation: 150,
-                handle: '.drag-handle',
-                ghostClass: 'sortable-ghost',
-                dragClass: 'sortable-drag',
+                animation: 150, handle: '.drag-handle', ghostClass: 'sortable-ghost',
                 onEnd: function () { saveNewOrder(); }
             });
         }
+        function saveNewOrder() { /* Backend sıralama opsiyonel */ }
 
-        function saveNewOrder() {
-            // Ekranda o an görünen sırayı al (Sadece o günün sıralamasını etkiler)
-            const listItems = document.querySelectorAll('#taskList li');
-            const newOrderIds = Array.from(listItems).map(li => parseInt(li.getAttribute('data-id')));
-
-            // Veri yapısını güncelle (Karmaşık olmaması için basit UI güncellemesi)
-            // Gerçek bir backend senaryosunda her gün için ayrı order tutulmalı.
-        }
-
-        // --- API & TASKS ---
+        // --- VERİ ÇEKME & BAŞLATMA ---
         async function fetchTasks() {
             try {
                 const res = await fetch(API_URL);
                 tasksData = await res.json();
 
-                calculateStreak(tasksData); // Zinciri hesapla
-                renderTasks(tasksData);     // Listeyi çiz
-            } catch (e) {
-                document.getElementById('emptyMessage').textContent = "Hata oluştu.";
-            }
+                // Sayfa açıldığında "Çalışıyor" görünenleri tekrar tetikle
+                // Burası sihrin gerçekleştiği yer: Kapanıp açılsa bile buradan devam eder
+                tasksData.forEach(task => {
+                    if (task.isRunning) {
+                        startUIInterval(task.id);
+                    }
+                });
+
+                calculateStreak(tasksData);
+                renderTasks(tasksData);
+            } catch (e) { document.getElementById('emptyMessage').textContent = "Hata oluştu."; }
         }
 
         async function saveTasks(tasks, shouldRender = true) {
@@ -414,31 +194,36 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(tasks)
                 });
-                tasksData = tasks; // Global veriyi güncelle
+                tasksData = tasks;
                 calculateStreak(tasksData);
                 if(shouldRender) renderTasks(tasks);
-            } catch (e) { alert("Kaydedilemedi."); }
+            } catch (e) { console.error("Kayıt hatası"); }
         }
 
         async function addTask() {
             const text = document.getElementById('taskInput').value.trim();
             const start = document.getElementById('startTime').value;
             const end = document.getElementById('endTime').value;
-            const selectedDate = document.getElementById('taskDate').value; // Seçili tarihe ekle
+            const selectedDate = document.getElementById('taskDate').value;
 
-            if (!text || !start || !end) return alert("Eksik bilgi girdin.");
-            if (start >= end) return alert("Bitiş saati başlangıçtan sonra olmalı.");
+            if (!text || !start || !end) return alert("Eksik bilgi.");
+            if (start >= end) return alert("Saat hatası.");
 
             document.getElementById('addBtn').disabled = true;
 
             const task = {
                 id: Date.now(),
                 text: text,
-                date: selectedDate, // O an hangi gün açıksa ona eklenir
+                date: selectedDate,
                 category: document.getElementById('taskCategory').value,
                 startTime: start,
                 endTime: end,
-                elapsedTime: 0, // Kaç saniye çalışıldı
+
+                // KRİTİK VERİLER
+                elapsedTime: 0,       // Toplam birikmiş süre
+                isRunning: false,     // Çalışıyor mu?
+                lastStartTime: null,  // En son ne zaman başlatıldı?
+
                 completed: false,
                 completedAt: null
             };
@@ -451,10 +236,9 @@
         }
 
         async function toggleTask(id) {
-            if(activeTaskId === id) stopTimer();
-
             const t = tasksData.find(x => x.id === id);
             if(t) {
+                if(t.isRunning) toggleTimer(id); // Tamamlanınca sayacı durdur
                 t.completed = !t.completed;
                 t.completedAt = t.completed ? new Date().toLocaleTimeString('tr-TR', {hour:'2-digit', minute:'2-digit'}) : null;
                 saveTasks(tasksData);
@@ -462,120 +246,141 @@
         }
 
         async function deleteTask(id) {
-            if(activeTaskId === id) stopTimer();
-            if(confirm("Görevi silmek istiyor musun?")) {
+            if (activeIntervals[id]) clearInterval(activeIntervals[id]);
+            if(confirm("Silinsin mi?")) {
                 const newTasks = tasksData.filter(t => t.id !== id);
                 saveTasks(newTasks);
             }
         }
 
-        // --- GELİŞMİŞ TIMER MANTIĞI ---
+        // --- ZAMANLAYICI MANTIĞI (ARKA PLAN DESTEKLİ) ---
 
-        // İki saat arasındaki farkı saniye olarak bul
         function getDurationSeconds(start, end) {
             const [h1, m1] = start.split(':').map(Number);
             const [h2, m2] = end.split(':').map(Number);
             return (h2 * 3600 + m2 * 60) - (h1 * 3600 + m1 * 60);
         }
 
-        // Saniyeyi Dakika:Saniye formatına çevir
         function formatTime(seconds) {
+            if (seconds < 0) seconds = 0;
             const h = Math.floor(seconds / 3600);
             const m = Math.floor((seconds % 3600) / 60);
-            const s = seconds % 60;
+            const s = Math.floor(seconds % 60);
+            return `${h > 0 ? h + ':' : ''}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        }
 
-            // Eğer saat varsa H:MM:SS, yoksa MM:SS
-            if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-            return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        // En önemli fonksiyon: Şu anki gerçek geçen süreyi hesaplar
+        function calculateTotalElapsed(task) {
+            let total = task.elapsedTime || 0;
+            // Eğer çalışıyorsa: (Eski Biriken) + (Şu an - Başlangıç Zamanı)
+            if (task.isRunning && task.lastStartTime) {
+                const currentSession = (Date.now() - task.lastStartTime) / 1000;
+                total += currentSession;
+            }
+            return total;
         }
 
         function toggleTimer(id) {
-            // Eğer çalışan bu ise durdur
-            if (activeTaskId === id) {
-                stopTimer();
-                return;
+            const task = tasksData.find(t => t.id === id);
+            if (!task) return;
+
+            if (task.isRunning) {
+                // DURDURMA: Süreyi sabitle ve kaydet
+                const sessionSeconds = (Date.now() - task.lastStartTime) / 1000;
+                task.elapsedTime += sessionSeconds;
+
+                task.isRunning = false;
+                task.lastStartTime = null;
+
+                if (activeIntervals[id]) {
+                    clearInterval(activeIntervals[id]);
+                    delete activeIntervals[id];
+                }
+                updateTimerUI(id, false);
+
+            } else {
+                // BAŞLATMA: Sadece bir tane çalışabilir
+                tasksData.forEach(t => {
+                    if (t.id !== id && t.isRunning) toggleTimer(t.id);
+                });
+
+                task.isRunning = true;
+                task.lastStartTime = Date.now(); // Zaman damgasını vur
+
+                startUIInterval(id);
             }
 
-            // Başka bir sayaç varsa önce onu durdur
-            if (activeTimerInterval) stopTimer();
+            // Durumu sunucuya kaydet (Kesinti olursa buradan devam eder)
+            saveTasks(tasksData, false);
+        }
 
-            activeTaskId = id;
-            const task = tasksData.find(t => t.id === id);
-            const totalDuration = getDurationSeconds(task.startTime, task.endTime);
+        // Ekranda sayacı ilerleten görsel fonksiyon
+        function startUIInterval(id) {
+            if (activeIntervals[id]) clearInterval(activeIntervals[id]);
+            updateTimerUI(id, true);
 
-            // UI Güncelle
-            const btn = document.getElementById(`btn-${id}`);
-            const display = document.getElementById(`timer-${id}`);
-            btn.innerHTML = "⏸"; // Pause ikonu
-            display.classList.add('timer-active');
+            activeIntervals[id] = setInterval(() => {
+                const task = tasksData.find(t => t.id === id);
+                if (!task || !task.isRunning) {
+                    clearInterval(activeIntervals[id]);
+                    return;
+                }
 
-            activeTimerInterval = setInterval(() => {
-                // Her saniye geçen süreyi artır
-                task.elapsedTime = (task.elapsedTime || 0) + 1;
+                const totalTarget = getDurationSeconds(task.startTime, task.endTime);
+                const currentElapsed = calculateTotalElapsed(task);
 
-                // Geri Sayım (Toplam - Geçen)
-                let remaining = totalDuration - task.elapsedTime;
+                // Kalan Süre (Geri Sayım)
+                let remaining = totalTarget - currentElapsed;
 
-                // Süre biterse 0'da kalsın
+                // Süre biterse 00:00'da kal, negatife düşme
                 if (remaining <= 0) {
                     remaining = 0;
-                    // Bir kereye mahsus ses çalınabilir
-                    if(remaining === 0 && (task.elapsedTime - totalDuration) === 1) {
+                    // Tam bittiği saniye ses çal
+                    if (remaining === 0 && (Math.abs(currentElapsed - totalTarget) < 1)) {
                          document.getElementById('alarmSound').play().catch(e=>{});
                     }
                 }
 
-                // Ekranı Güncelle
-                display.textContent = formatTime(remaining);
-
-                // "Çalışılan Süre" Badge'ini Güncelle
+                // UI Güncelleme
+                const display = document.getElementById(`timer-${id}`);
                 const workedBadge = document.getElementById(`worked-${id}`);
-                workedBadge.style.display = 'inline-block';
-                const workedMin = Math.floor(task.elapsedTime / 60);
-                workedBadge.textContent = `⚡ ${workedMin}dk Çalışıldı`;
+
+                if (display) display.textContent = formatTime(remaining);
+                if (workedBadge) {
+                    workedBadge.style.display = 'inline-block';
+                    // Çalışılan süre sonsuza kadar artmaya devam eder
+                    workedBadge.textContent = `⚡ ${Math.floor(currentElapsed / 60)}dk Çalışıldı`;
+                }
 
             }, 1000);
         }
 
-        function stopTimer() {
-            if (activeTaskId) {
-                // Durunca veriyi kaydet (Zaman kaybı olmasın)
-                saveTasks(tasksData, false);
-
-                const display = document.getElementById(`timer-${activeTaskId}`);
-                const btn = document.getElementById(`btn-${activeTaskId}`);
-                if(display) display.classList.remove('timer-active');
-                if(btn) btn.innerHTML = "▶";
+        function updateTimerUI(id, isRunning) {
+            const btn = document.getElementById(`btn-${id}`);
+            const display = document.getElementById(`timer-${id}`);
+            if (btn) btn.innerHTML = isRunning ? "⏸" : "▶";
+            if (display) {
+                if(isRunning) display.classList.add('timer-active');
+                else display.classList.remove('timer-active');
             }
-            clearInterval(activeTimerInterval);
-            activeTimerInterval = null;
-            activeTaskId = null;
         }
 
-        // --- RENDER (LİSTELEME) ---
+        // --- RENDER ---
         function renderTasks(allTasks) {
             const list = document.getElementById('taskList');
             const emptyMsg = document.getElementById('emptyMessage');
-
-            // 1. Seçili tarihi al
             const selectedDate = document.getElementById('taskDate').value;
-
-            // 2. Sadece o tarihin görevlerini filtrele
             const filteredTasks = allTasks.filter(task => task.date === selectedDate);
 
             list.innerHTML = '';
 
-            // Boş durum mesajı
             if (filteredTasks.length === 0) {
                 emptyMsg.style.display = 'block';
-                emptyMsg.textContent = selectedDate === new Date().toISOString().split('T')[0]
-                    ? "Bugün için henüz plan yok."
-                    : "Bu tarihte kayıtlı görev yok.";
+                emptyMsg.textContent = selectedDate === new Date().toISOString().split('T')[0] ? "Bugün için plan yok." : "Kayıt yok.";
             } else {
                 emptyMsg.style.display = 'none';
             }
 
-            // Progress Bar (Sadece o günün verisi)
             const completedCount = filteredTasks.filter(t => t.completed).length;
             updateProgress(completedCount, filteredTasks.length);
 
@@ -585,18 +390,20 @@
                 if (task.completed) li.classList.add('completed');
                 li.classList.add(`cat-${task.category || 'other'}`);
 
-                // Zaman hesaplamaları
-                const totalSeconds = getDurationSeconds(task.startTime, task.endTime);
-                const elapsed = task.elapsedTime || 0;
-                let remaining = totalSeconds - elapsed;
+                // Render anında doğru süreyi hesapla (Sayfa yenilendiğinde burası çalışır)
+                const totalTarget = getDurationSeconds(task.startTime, task.endTime);
+                const currentElapsed = calculateTotalElapsed(task);
+                let remaining = totalTarget - currentElapsed;
                 if (remaining < 0) remaining = 0;
 
-                const workedMinutes = Math.floor(elapsed / 60);
+                const workedMinutes = Math.floor(currentElapsed / 60);
                 const showWorked = workedMinutes > 0 ? 'inline-block' : 'none';
+
+                const btnIcon = task.isRunning ? "⏸" : "▶";
+                const activeClass = task.isRunning ? "timer-active" : "";
 
                 li.innerHTML = `
                     <div class="drag-handle">⋮⋮</div>
-
                     <div class="task-info" onclick="toggleTask(${task.id})">
                         <div class="badges">
                             <span class="badge badge-cat">${getCatLabel(task.category)}</span>
@@ -606,14 +413,11 @@
                         <span class="task-text">${task.text}</span>
                         <div class="completed-msg">✅ Tamamlandı</div>
                     </div>
-
                     ${!task.completed ? `
                     <div class="timer-box">
-                        <div class="timer-display" id="timer-${task.id}">${formatTime(remaining)}</div>
-                        <button class="timer-btn" id="btn-${task.id}" onclick="toggleTimer(${task.id})">▶</button>
-                    </div>
-                    ` : '<div></div>'}
-
+                        <div class="timer-display ${activeClass}" id="timer-${task.id}">${formatTime(remaining)}</div>
+                        <button class="timer-btn" id="btn-${task.id}" onclick="toggleTimer(${task.id})">${btnIcon}</button>
+                    </div>` : '<div></div>'}
                     <button class="delete-btn" onclick="deleteTask(${task.id})">✕</button>
                 `;
                 list.appendChild(li);
@@ -631,44 +435,24 @@
             bar.style.width = `${pct}%`;
             document.getElementById('progressText').textContent = `%${pct} Tamamlandı`;
             document.getElementById('countText').textContent = `${done}/${total} Görev`;
-
-            // Tamamlanınca yeşil, yoksa sarı
             bar.style.backgroundColor = pct === 100 ? '#10b981' : '#eab308';
         }
 
-        // --- ZİNCİR (STREAK) HESAPLAMA ---
         function calculateStreak(tasks) {
-            // Tüm tarihlerden benzersiz tamamlananları al
             const completedDates = [...new Set(tasks.filter(t => t.completed).map(t => t.date))].sort().reverse();
-
-            if (completedDates.length === 0) {
-                document.getElementById('streakBadge').style.display = 'none';
-                return;
-            }
-
+            if (completedDates.length === 0) { document.getElementById('streakBadge').style.display = 'none'; return; }
             const today = new Date().toISOString().split('T')[0];
             let streak = 0;
             let check = new Date();
-
-            // Eğer bugün yapılmadıysa dünden başla kontrol etmeye
             if(!completedDates.includes(today)) check.setDate(check.getDate() - 1);
-
             while(true) {
-                if(completedDates.includes(check.toISOString().split('T')[0])) {
-                    streak++;
-                    check.setDate(check.getDate() - 1);
-                } else {
-                    break;
-                }
+                if(completedDates.includes(check.toISOString().split('T')[0])) { streak++; check.setDate(check.getDate() - 1); }
+                else break;
             }
-
-            // En az 1 gün varsa göster
             if(streak > 0) {
                 const b = document.getElementById('streakBadge');
                 b.style.display = 'flex';
                 b.querySelector('span').textContent = `${streak} Günlük Seri`;
-            } else {
-                document.getElementById('streakBadge').style.display = 'none';
             }
         }
     </script>
