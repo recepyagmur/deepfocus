@@ -29,6 +29,8 @@ Günlük hedeflerini planlayabilir, her göreve başlangıç–bitiş saatleri b
 
 💾 JSON tabanlı API ile verilerin kalıcı olarak saklanması
 
+⏱ Görev geldiğinde ve her saatte 1 bildirim gönderimi yapılmaktadır
+
 # GEREKLİ PAKETLER VE AYARLAR:
 
 ```
@@ -38,3 +40,8 @@ sudo systemctl restart apache2
 sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 755 /var/www/html
 ```
+```
+crontab -e # 1'i seçip aşağıdaki komutu sonra ekleyebilirsiniz
+* * * * * /usr/bin/php /var/www/notify.php
+```
+
